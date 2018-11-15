@@ -1,18 +1,19 @@
 # Interface-Library-of-Statistics
 I Love Statistics
 
-vlstar.c      主函数 可以将app.c中的函数纳入进来
-app.c         具体统计模型设定
-app.h
+## Main Functions
+* vlstar.c          main function TODO: merge app.c in here
+* app.c             specific statistical model setting
+* app.h             header file
 -----------------------------------------------------------------
-model.h       软件包主体
-variables.c   抽象统计模型设定
-variables.h
-data.c        数据管理
-data.h
-simulation.c  给定参数和初值模拟数据
-estimation.c  参数估计
+* model.h         package body TODO: change name
+* variables.c     abstract statistical model setting
+* variables.h     header file
+* data.c             data manager
+* data.h             header file
+* simulation.c   simulation data for given parameters and initial values
+* estimation.c   estimation of parameters
 -----------------------------------------------------------------
-utilities.c   各类工具
-utilities.h
+* utilities.c          matrix vector utilities and so on
+* utilities.h         header file
 
