@@ -61,14 +61,14 @@ void vlstar(double* Y[], double *parameters, double *epsilon, int flag)
    c       = gamma+1;
 
    /* Y1t = pi'    * Y2t + phi1_s * Yt1                   */
-   mv (1.0, pi,     Y2t, 0.0, Y1t, 't', 2, 2);
-   mv (1.0, phi1_s, Yt1, 1.0, Y1t, 'n', 2, 4);
+   mv (1.0, pi,     Y2t, 0.0, Y1t, 'T', 2, 2);
+   mv (1.0, phi1_s, Yt1, 1.0, Y1t, 'N', 2, 4);
    /* Y2t = phi2_s * Yt1 + psi2_s * Yt1 * G(st, gamma, c) */
-   mv (1.0, psi2_s, Yt1, 0.0, Y2t, 'n', 2, 4);
+   mv (1.0, psi2_s, Yt1, 0.0, Y2t, 'N', 2, 4);
    /* g = 1 / (1+exp(-gamma(st-c))) */
    g = sigmoid(&st, gamma, c, 1);
    scal (g, Y2t, 2);
-   mv (1.0, phi2_s, Yt1, 1.0, Y2t, 'n', 2, 4);
+   mv (1.0, phi2_s, Yt1, 1.0, Y2t, 'N', 2, 4);
 
 //   printf ( "Yt1 = %e, %e\n", Yt1[0], Yt1[1] );
 //   printf ( "Yt2 = %e, %e\n", Yt2[0], Yt2[1] );
@@ -112,7 +112,7 @@ void setpara(double *para, int flag)
       psi2_s[0] = 0.1; psi2_s[2] = 0.0; psi2_s[4] = 0.0; psi2_s[6] = 0.1;
       psi2_s[1] = 0.0; psi2_s[3] =-0.1; psi2_s[5] =-0.1; psi2_s[7] = 0.0;
       /* gamma c */
-      gamma[0] = 0.0; c[0] = 0.0;
+      gamma[0] = 0.1; c[0] = 0.1;
    }
    else 
    {

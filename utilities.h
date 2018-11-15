@@ -23,7 +23,6 @@
 
 void copy(double *x, double *y, int size);
 void cholesky(double *chol, int dim, char lu);
-void inverse( double *chol_L, int dim, char lu);
 void mv(double a, double *mat, double *x, double b, double *y, char nt, int nrow, int ncol);
 void axpy(double a, double *x, double *y, int size);
 void scal(double a, double *y, int size);

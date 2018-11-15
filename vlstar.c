@@ -67,13 +67,13 @@ int main ( int argc, char *argv[] )
 //   MODEL_DataPrint(resi_data);
    printf ( "res = %e\n", res );
 //   MODEL_DataPrint(epsi_data);
+   MODEL_VariablesPrint(variables);
 
 //   MODEL_DataPrint(real_data);
    /* 设定统计模型中的初始参数 */
-   setpara(init_para, 1);
+   setpara(init_para, 0);
    MODEL_VariablesSetActiveParameters(variables, init_para, -1, NULL);
    /* 给定数据估计模型参数并返回残差数据 */
-   MODEL_VariablesPrint(variables);
    MODEL_Estimation(real_data, simu_data, resi_data, variables, argc, argv);
 //   MODEL_DataPrint(real_data);
 //   MODEL_DataPrint(simu_data);
@@ -83,8 +83,8 @@ int main ( int argc, char *argv[] )
    res = 0;
    for(int i = 0; i < NUM_PARA; ++i)
    {
-      res += variables->parameters[i] - init_para[i];
-      printf ( "%f\n", variables->parameters[i] - init_para[i] );
+      res += variables->parameters[i] - real_para[i];
+      printf ( "%f\n", variables->parameters[i] - real_para[i] );
    }
    printf ( "res of para = %f \n", res );
 

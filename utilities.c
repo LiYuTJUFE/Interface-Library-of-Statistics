@@ -27,39 +27,73 @@
 #define QQQ 53668
 #define RRR 12211
 
+/* LAPACK subroutine */
+void dpotrf_(char *uplo, int *n, double *a, int *lda, int *info);
 
+void cholesky(double *mat, int dim, char lu)
+{
+   int i, k;
+   char uplo = lu;
+   int  n    = dim;
+   double *a = mat;
+   int  lda  = dim;
+   int  info;
+   dpotrf_(&uplo, &n, a, &lda, &info);
+   if (lu == 'L')
+   {
+      for (i = 0; i < dim; ++i) 
+	 for (k = i+1; k < dim; ++k) 
+	    mat[i+k*dim] = 0;
+   }
+   else if (lu == 'U')
+   {
+      for (i = 0; i < dim; ++i) 
+	 for (k = 0; k < i; ++k) 
+	    mat[i+k*dim] = 0;
+   }
+   else {
+      printf ( "Unknown type %c\n", lu );
+   }
+}
 void copy(double *x, double *y, int size)
 {
    for (int idx = 0; idx < size; ++idx)
       y[idx] = x[idx];
 }
-void cholesky(double *mat, int dim, char lu)
-{
-//   for (int idx = 0; idx < dim*dim; ++idx)
-//      mat[idx] = 0;
-   for (int idx = 0; idx < dim; ++idx)
-      mat[idx*(dim+1)] = sqrt(mat[idx*(dim+1)]);
-}
-void inverse( double *mat, int dim, char lu)
-{
-//   for (int idx = 0; idx < dim*dim; ++idx)
-//      mat[idx] = 0;
-   for (int idx = 0; idx < dim; ++idx)
-      mat[idx*(dim+1)] = 1 / mat[idx*(dim+1)];
-}
-/* y = a mat x + b y */
+/* y = a mat x + b y  
+ * mat is stored by col */
 void mv(double a, double *mat, double *x, double b, double *y, char nt, int nrow, int ncol)
 {
    int i, k;
    double z;
-   for (i = 0; i < nrow; ++i)
+   if (nt == 'N')
    {
-      z = 0;
-      for (k = 0; k < ncol; ++k)
+      /* y[i] = a \sum_{k=0}^{ncol-1} mat[i][k] x[k] + b y[i]  */
+      for (i = 0; i < nrow; ++i)
       {
-	 z += mat[i+k*nrow]*x[k];
+	 z = 0;
+	 for (k = 0; k < ncol; ++k)
+	 {
+	    z += mat[i+k*nrow]*x[k];
+	 }
+	 y[i] = a*z + b*y[i];
       }
-      y[i] = a*z + b*y[i];
+
+   }
+   else if(nt == 'T') 
+   {
+      for (i = 0; i < ncol; ++i)
+      {
+	 z = 0;
+	 for (k = 0; k < nrow; ++k)
+	 {
+	    z += mat[k+i*nrow]*x[k];
+	 }
+	 y[i] = a*z + b*y[i];
+      }
+   }
+   else {
+      printf ( "Unknown type: %c\n", nt );
    }
 }
 void axpy(double a, double *x, double *y, int size)
@@ -92,12 +126,6 @@ void SetMultivariateNormalRandomValues(double *random_values, double *mu, double
    copy(sigma, chol_L, dim*dim);
    /* sigma = L L' */
    cholesky( chol_L, dim, 'L');
-   /* L^{-1} */
-//   inverse( chol_L, dim, 'L');
-//   printf ( "chol_L %e, %e, %e, %e\n", chol_L[0] , chol_L[4], chol_L[8],  chol_L[12]);
-//   printf ( "chol_L %e, %e, %e, %e\n", chol_L[1] , chol_L[5], chol_L[9],  chol_L[13]);
-//   printf ( "chol_L %e, %e, %e, %e\n", chol_L[2] , chol_L[6], chol_L[10], chol_L[14]);
-//   printf ( "chol_L %e, %e, %e, %e\n", chol_L[3] , chol_L[7], chol_L[11], chol_L[15]);
 
    int size = num*dim/2;
    /* standardized normal random values */
@@ -116,9 +144,7 @@ void SetMultivariateNormalRandomValues(double *random_values, double *mu, double
    for (int idx = 0; idx < num; ++idx)
    {
       /* tmp = L prt */
-      mv(1.0, chol_L, ptr, 0.0, tmp, 'n', dim, dim);
-//      printf ( "ptr = %e, %e, %e, %e\n", ptr[0], ptr[1], ptr[2], ptr[3] );
-//      printf ( "tmp = %e, %e, %e, %e\n", tmp[0], tmp[1], tmp[2], tmp[3] );
+      mv(1.0, chol_L, ptr, 0.0, tmp, 'N', dim, dim);
       /* tmp = mu + tmp */
       axpy(1.0, mu, tmp, dim);
       /* ptr = tmp */
@@ -188,5 +214,3 @@ void BoxMuller(double *normal_x, double *normal_y, double mu, double sigma, int 
       free(normal_y);
    }
 }
-
- 
