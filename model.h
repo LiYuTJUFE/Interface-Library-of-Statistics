@@ -24,7 +24,6 @@
 #include "utilities.h"
 #include "variables.h"
 #include "data.h"
-#include "app.h"
 
 typedef struct model_Statistics_struct
 {

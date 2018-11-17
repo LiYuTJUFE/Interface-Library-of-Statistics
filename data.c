@@ -19,6 +19,7 @@
 #include <stdio.h>
 
 #include "data.h"
+#include "utilities.h"
 
 
 void MODEL_DataCreate (MODEL_Data* data, int T, int dim)
@@ -35,6 +36,14 @@ void MODEL_DataDestroy(MODEL_Data* data)
    free(*data);
    *data = NULL;
 }
+void MODEL_DataCopy(MODEL_Data s_data, MODEL_Data d_data)
+{
+   double *s_ptr = MODEL_DataGetY(s_data, 0);
+   double *d_ptr = MODEL_DataGetY(d_data, 0);
+   int size = MODEL_DataGetT(d_data)*MODEL_DataGetDim(d_data);
+   copy(s_ptr, d_ptr, size);
+}
+
 void MODEL_DataSetZeros(MODEL_Data data)
 {
    double *ptr = MODEL_DataGetY(data, 0);

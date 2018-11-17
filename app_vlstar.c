@@ -18,7 +18,7 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "app.h"
+#include "app_vlstar.h"
 
 double sigmoid(double *s, double *gamma, double *c, int size)
 {
@@ -87,12 +87,12 @@ void vlstar(double* Y[], double *parameters, double *epsilon, int flag)
  *   phi2_s  2*4     psi2_s  2*4
  *   gamma   1       c       1
  * */
-void setpara(double *para, int flag)
+void setpara(double *parameters, int flag)
 {
    if (flag)
    {
       double *pi, *phi1_s, *phi2_s, *psi2_s, *gamma, *c;
-      pi     = para;
+      pi     = parameters;
       phi1_s = pi+4;
       phi2_s = phi1_s+8;
       psi2_s = phi2_s+8;
@@ -118,7 +118,7 @@ void setpara(double *para, int flag)
    {
       for (int i = 0; i < 30; ++i)
       {
-	 *para = 0.0; ++para;
+	 *parameters = 0.0; ++parameters;
       }
    }
 }

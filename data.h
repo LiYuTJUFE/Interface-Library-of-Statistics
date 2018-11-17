@@ -48,5 +48,6 @@ void MODEL_DataSetZeros(MODEL_Data data);
 void MODEL_DataSetRandomValues(MODEL_Data data);
 void MODEL_DataSetMultivariateNormalRandomValues(MODEL_Data data, double *mu, double *sigma);
 void MODEL_DataPrint(MODEL_Data data);
+void MODEL_DataCopy(MODEL_Data s_data, MODEL_Data d_data);
 
 #endif

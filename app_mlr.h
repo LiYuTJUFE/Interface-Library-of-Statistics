@@ -17,13 +17,12 @@
  */
 
 
-#ifndef  _APP_H_
-#define  _APP_H_
+#ifndef  _APP_MLR_H_
+#define  _APP_MLR_H_
 
 #include "variables.h"
 #include "utilities.h"
 
-void setpara(double *para, int flag);
-double sigmoid(double *s, double *gamma, double *c, int size);
-void vlstar(double* Y[], double *parameters, double *epsilon, int flag);
+void setpara(double *parameters, int flag);
+void mlr(double* Y[], double *parameters, double *epsilon, int flag);
 #endif
