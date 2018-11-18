@@ -49,7 +49,7 @@ int main ( int argc, char *argv[] )
    MODEL_DataCreate (&epsi_data, T, 1);
 
    /* 设定统计模型中的参数 */
-   setpara(real_para, 1);
+   setpara_mlr(real_para, 1);
    MODEL_VariablesSetActiveParameters(variables, real_para, -1, NULL);
    /* 生成多元正态分布随机向量 */
    srand(time(NULL));
@@ -71,7 +71,7 @@ int main ( int argc, char *argv[] )
 #if 1
 //   MODEL_DataPrint(real_data);
    /* 设定统计模型中的初始参数 */
-   setpara(init_para, 1);
+   setpara_mlr(init_para, 1);
    MODEL_VariablesSetActiveParameters(variables, init_para, -1, NULL);
    /* 给定数据估计模型参数并返回残差数据 */
    MODEL_Estimation(real_data, simu_data, resi_data, variables, argc, argv);

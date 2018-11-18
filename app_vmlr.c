@@ -18,54 +18,56 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "app_mlr.h"
+#include "app_vmlr.h"
 
 /* if flag == 1, then epsilon should be used
  * 
- * Yt = beta0 + beta1' Xt + epsilon
+ * Yt = beta0 + beta1 Xt + epsilon
+ *
+ * the size of Yt beta0 beta1 epsilon is 
+ *  2*1   2*1   2*4   4*1   2*1
  *
  * */
-void mlr(double* Y[], double *parameters, double *epsilon, int flag)
+void vmlr(double* Y[], double *parameters, double *epsilon, int flag)
 {
-   double *Yt, *Xt, *beta0, *beta1, *epst, tmp;
-   int size  = 3;
+   double *Yt, *Xt, *beta0, *beta1, *epst;
 
    Yt        = Y[0];
-   Xt        = Yt+1;
+   Xt        = Yt+2;
 
    beta0     = parameters;
-   beta1     = beta0+1;
+   beta1     = beta0+2;
 
-   /* Yt = beta0 + beta1' Xt */
-   tmp       = dot(beta1, Xt, size);
-   Yt[0]     = beta0[0] + tmp;
+   /* Yt = beta0 + beta1 Xt */
+   mv(1.0, beta1, Xt, 0.0, Yt, 'N', 2, 4);
+   axpy(1.0, beta0, Yt, 2);
 
    if (flag)
    {
       epst   = epsilon;
-      Yt[0] += epst[0];
+      axpy(1.0, epst, Yt, 2);
    }
 }
 /* The size of parameters 
- *   beta0   1   
- *   beta1   3
+ *   beta0   2   
+ *   beta1   2*4
  * */
-void setpara_mlr(double *parameters, int flag)
+void setpara_vmlr(double *parameters, int flag)
 {
    if (flag)
    {
       double *beta0, *beta1;
       beta0     = parameters;
-      beta1     = beta0+1;
+      beta1     = beta0+2;
 
-      beta0[0]  = 0.01;
-      beta1[0]  = 1.0;
-      beta1[1]  = 1.0;
-      beta1[2]  = 1.0;
+      beta0[0]  = 0.1;
+      beta0[1]  = 0.1;
+      beta1[0]  = 1.0; beta1[2]  = 0.0; beta1[4]  = 1.0; beta1[6]  = 0.0;
+      beta1[1]  = 0.0; beta1[3]  = 1.0; beta1[5]  = 0.0; beta1[7]  = 1.0;
    }
    else 
    {
-      for (int i = 0; i < 4; ++i)
+      for (int i = 0; i < 10; ++i)
       {
 	 *parameters = 0.0; ++parameters;
       }

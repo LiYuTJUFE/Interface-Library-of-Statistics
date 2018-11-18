@@ -23,7 +23,7 @@
 #include "variables.h"
 #include "utilities.h"
 
-void setpara(double *parameters, int flag);
+void setpara_vlstar(double *parameters, int flag);
 double sigmoid(double *s, double *gamma, double *c, int size);
 void vlstar(double* Y[], double *parameters, double *epsilon, int flag);
 #endif

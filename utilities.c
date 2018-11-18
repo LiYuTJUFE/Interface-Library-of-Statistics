@@ -28,17 +28,17 @@
 #define RRR 12211
 
 /* LAPACK subroutine */
-void dpotrf_(char *uplo, int *n, double *a, int *lda, int *info);
+void dpotrf_(char *uplo, int *n, double *A, int *ldA, int *info);
 
 void cholesky(double *mat, int dim, char lu)
 {
    int i, k;
    char uplo = lu;
    int  n    = dim;
-   double *a = mat;
-   int  lda  = dim;
+   double *A = mat;
+   int  ldA  = dim;
    int  info;
-   dpotrf_(&uplo, &n, a, &lda, &info);
+   dpotrf_(&uplo, &n, A, &ldA, &info);
    if (lu == 'L')
    {
       for (i = 0; i < dim; ++i) 

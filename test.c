@@ -6,7 +6,7 @@
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  11/06/2018 03:42:04 PM
+ *        Created:  11/06/2018 01:46:31 PM
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -16,63 +16,70 @@
  * =====================================================================================
  */
 
+#include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
+#include <assert.h>
+
+
 #include "model.h"
-#include "time.h"
 
 
-#define DIM       3
+/* C = alpha A B + beta C */
+void dgemm_(char *transA, char *transB,
+      int *m, int *n, int *k, 
+      double *alpha, 
+      double *A, int *ldA, 
+      double *B, int *ldB, 
+      double *beta, 
+      double *C, int *ldC 
+      );
 
-int main ( int argc, char *argv[] )
+
+/* 函数名需要修改，这里对计算 (1/T) \sum e_i e_i' */
+void MODEL_TestSigma(MODEL_Data resi_data, MODEL_Variables variables, double *sigma)
 {
-   int i, k;
-   /* stored by col */
-   double x[DIM] = {1, 2, 3};
-   double y[DIM] = {3, 2, 1};
-   double A[DIM*DIM] = {5, 2, 3,
-                        2, 3, 4, 
-                        3, 4, 5};
-   double B[DIM*DIM] = {1, 2, 3,
-                        4, 5, 6, 
-                        7, 8, 9};
-   printf ( "x\n" );
-   for (i = 0; i < DIM; ++i)
+   int    idx, T;
+   char   transA, transB;
+   int    m, n, k;
+   double *A, *B, *C;
+   int    ldA, ldB, ldC;
+   double alpha, beta;
+
+   transA = 'N'; transB = 'N';
+   m   = MODEL_DataGetDim(resi_data);
+   n   = m;
+   k   = 1;
+   T   = MODEL_DataGetT(resi_data);
+   ldA = m; ldB = 1; ldC = m;
+   C   = sigma;
+   alpha = 1.0; beta = 1.0;
+
+   for (idx = 0; idx < m*n; ++idx)
    {
-      printf ( "%.3f\n", x[i] );
-   }
-   printf ( "y\n" );
-   for (i = 0; i < DIM; ++i)
-   {
-      printf ( "%.3f\n", y[i] );
-   }
-   printf ( "B\n" );
-   for (i = 0; i < DIM; ++i)
-   {
-      for (k = 0; k < DIM; ++k)
-      {
-	 printf ( "%.3f  ", B[i+k*DIM] );
-      }
-      printf ( "\n" );
-   }
-   double a, b;
-   a = 0.1; b = 0.1;
-   mv(a, B, x, b, y, 'N', DIM, DIM);
-   printf ( "y = %0.3f B x + %.3f y\n", a, b );
-   for (i = 0; i < DIM; ++i)
-   {
-      printf ( "%.3f\n", y[i] );
+      C[idx] = 0.0;
    }
 
-   cholesky(A, DIM, 'L');
-   printf ( "A = L * L**T\n" );
-   for (i = 0; i < DIM; ++i)
+   printf ( "------------------------------------------\n" );
+   for (idx = 0; idx < T; ++idx)
    {
-      for (k = 0; k < DIM; ++k)
-      {
-	 printf ( "%.3f  ", A[i+k*DIM] );
-      }
-      printf ( "\n" );
+      A = MODEL_DataGetY(resi_data, idx);
+      B = A;
+      dgemm_(&transA, &transB, &m, &n, &k, 
+	    &alpha, A, &ldA, B, &ldB, 
+	    &beta, C, &ldC);
    }
-   return 0;
-}				/* ----------  end of function main  ---------- */
+
+   for (idx = 0; idx < m*n; ++idx)
+   {
+      C[idx] *= (1.0/T);
+   }
+
+
+   printf ( "--------------------------------------------" );
+   for (idx = 0; idx < m*n; ++idx )
+   {
+      if (idx%m == 0) printf ( "\n" );
+      printf ( "%0.2e\t", C[idx] );
+   }
+   printf ( "\n--------------------------------------------\n" );
+}

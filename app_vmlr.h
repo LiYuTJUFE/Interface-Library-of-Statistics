@@ -17,12 +17,12 @@
  */
 
 
-#ifndef  _APP_MLR_H_
-#define  _APP_MLR_H_
+#ifndef  _APP_VMLR_H_
+#define  _APP_VMLR_H_
 
 #include "variables.h"
 #include "utilities.h"
 
-void setpara(double *parameters, int flag);
-void mlr(double* Y[], double *parameters, double *epsilon, int flag);
+void setpara_vmlr(double *parameters, int flag);
+void vmlr(double* Y[], double *parameters, double *epsilon, int flag);
 #endif

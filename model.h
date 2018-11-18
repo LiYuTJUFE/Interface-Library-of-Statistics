@@ -44,4 +44,6 @@ double MODEL_EvalResiduals(MODEL_Data resi_data, MODEL_Data real_data, MODEL_Dat
 /* based on residuals to get statistics */
 void MODEL_StatisTest(MODEL_Statistics statistics, MODEL_Data residuals);
 
+void MODEL_TestSigma(MODEL_Data resi_data, MODEL_Variables variables, double *sigma);
+
 #endif

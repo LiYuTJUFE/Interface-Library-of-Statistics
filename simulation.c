@@ -24,16 +24,17 @@ void MODEL_Simulation(MODEL_Data data, MODEL_Variables variables, MODEL_Data ini
 {
    int p, tick, idx;
    p = MODEL_VariablesGetP(variables);  
+   MODEL_DataCopy(init_data, data);
 //   assert(MODEL_DataGetT(init_data) == p || flag_eps);
-   for (tick = 0; tick < p; ++tick)
-   {
-      copy(MODEL_DataGetY(init_data, tick), MODEL_DataGetY(data, tick), MODEL_VariablesGetDim(variables));
-   }
+//   for (tick = 0; tick < p; ++tick)
+//   {
+//      copy(MODEL_DataGetY(init_data, tick), MODEL_DataGetY(data, tick), MODEL_VariablesGetDim(variables));
+//   }
    /* for regression */
-   if (p == 0)
-   {
-      MODEL_DataCopy(init_data, data);
-   }
+//   if (p == 0)
+//   {
+//      MODEL_DataCopy(init_data, data);
+//   }
    /* Yt = Y[0]  Yt1 = Y[1]  ...  Ytp = Y[p] */
    double **Y = variables->Y;
    for (tick = p; tick < MODEL_DataGetT(data); ++tick)
