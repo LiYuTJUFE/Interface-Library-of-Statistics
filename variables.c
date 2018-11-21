@@ -33,14 +33,25 @@ void MODEL_VariablesDestroy(MODEL_Variables* variables)
    free(*variables);
    *variables = NULL;
 }
-void MODEL_VariablesSetActiveParameters(MODEL_Variables variables, double *real_para, int num_para, int *active_marks)
+void MODEL_VariablesSetActiveParameters(MODEL_Variables variables, double *real_para, int num_type, int *active_marks)
 {
    double *ptr = MODEL_VariablesGetParameters(variables);
-   if (num_para == -1 && active_marks == NULL)
+   int  *marks = MODEL_VariablesGetActiveMarks(variables);
+   if (active_marks == NULL)
    {
+      variables->num_type = 1;
       for (int idx = 0; idx < MODEL_VariablesGetNumParameters(variables); ++idx)
       {
-	 ptr[idx] = real_para[idx];
+	 ptr[idx]   = real_para[idx];
+	 marks[idx] = 1;
+      }
+   }
+   else {
+      variables->num_type = num_type;
+      for (int idx = 0; idx < MODEL_VariablesGetNumParameters(variables); ++idx)
+      {
+	 ptr[idx]   = real_para[idx];
+	 marks[idx] = active_marks[idx];
       }
    }
 }

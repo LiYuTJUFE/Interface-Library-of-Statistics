@@ -17,6 +17,9 @@ vmlr.exe: vmlr.o app_vmlr.o $(OBJS)
 vlstar.exe: vlstar.o app_vlstar.o $(OBJS)
 	-${CLINKER} -o $@ $^ ${PETSC_TAO_LIB} ${PETSC_TS_LIB}
 
+vlstar0.exe: vlstar0.o app_vlstar0.o $(OBJS)
+	-${CLINKER} -o $@ $^ ${PETSC_TAO_LIB} ${PETSC_TS_LIB}
+
 ex1: ex1.exe
 	./$<
 
@@ -25,6 +28,10 @@ mlr: mlr.exe
 
 vmlr: vmlr.exe
 	./$< -tao_smonitor -tao_type nls -tao_gatol 1.e-6
+
+vlstar0: vlstar0.exe
+	./$< -tao_smonitor -tao_type nls -tao_gatol 1.e-8
+#	valgrind  --tool=memcheck --leak-check=full -v --track-origins=yes --show-reachable=yes --read-var-info=yes ./$< -tao_smonitor -tao_type nls -tao_gatol 1.e-8
 
 vlstar: vlstar.exe
 	./$< -tao_smonitor -tao_type nls -tao_gatol 1.e-8

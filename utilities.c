@@ -214,3 +214,18 @@ void BoxMuller(double *normal_x, double *normal_y, double mu, double sigma, int 
       free(normal_y);
    }
 }
+
+
+int count(int *marks, int type, int num)
+{
+   int n, idx;
+   n = 0;
+   for (idx = 0; idx < num; ++idx)
+   {
+      if (marks[idx] == type)
+      {
+	 ++n;
+      }
+   }
+   return n;
+}

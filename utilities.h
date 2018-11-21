@@ -32,5 +32,6 @@ double dot(double *x, double *y, int size);
 void SetMultivariateNormalRandomValues(double *random_values, double *mu, double *sigma, int dim, int num);
 void BoxMuller(double *normal_x, double *normal_y, double mu, double sigma, int num);
 
+int count(int *marks, int type, int num);
 
 #endif

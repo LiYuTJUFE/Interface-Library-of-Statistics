@@ -34,11 +34,17 @@ typedef struct model_Variables_struct
    /* from t to t-p */
    int     p;
 
-   /* parameters */
+   /* parameters 
+    * the size is num_para */
    double  parameters[128];
-   /* if active_marks[0] = 0, then parameters[0] should be given and not be estimated */
+   /* if active_marks[0] = 0, then parameters[0] has been given and will not be estimated 
+    * the size is num_para */
    int     active_marks[128];
    int     num_para;
+   /* if num_para = 3, active_marks[0] = 0, active_marks[1] = 1 active_marks[0] = 2, 
+    * then num_type = 2. parameters[0] will not be estimated, and 
+    * parameters[1], parameters[2] will be estimated iteratively */
+   int     num_type;
    void  (*function)(double* Y[], double *parameters, double *epsilon, int flag);
 } model_Variables;
 typedef struct model_Variables_struct* MODEL_Variables;
@@ -54,10 +60,10 @@ typedef void (*MODEL_Function)(double* Y[], double *parameters, double *epsilon,
 #define MODEL_VariablesGetParameters(variables)      ((variables) -> parameters)
 #define MODEL_VariablesGetNumParameters(variables)   ((variables) -> num_para)
 #define MODEL_VariablesGetEpsilon(variables)         ((variables) -> epsilon)
-#define MODEL_VariablesGetRandomType(variables)      ((variables) -> type)
+#define MODEL_VariablesGetActiveMarks(variables)     ((variables) -> active_marks)
 
 void MODEL_VariablesCreate (MODEL_Variables* variables, int dim, int p, int num_para, MODEL_Function function);
 void MODEL_VariablesDestroy(MODEL_Variables* variables);
-void MODEL_VariablesSetActiveParameters(MODEL_Variables variables, double *real_para, int num_para, int *active_marks);
+void MODEL_VariablesSetActiveParameters(MODEL_Variables variables, double *real_para, int num_type, int *active_marks);
 void MODEL_VariablesPrint(MODEL_Variables variables);
 #endif
