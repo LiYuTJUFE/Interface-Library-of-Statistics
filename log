@@ -1,0 +1,2 @@
+2018.12.03 liyu
+利用ssh重新下载库, 并给予一个新的ssh, 参看./.git/config以及~/.ssh/config
